@@ -1,5 +1,3 @@
-// https://github.com/sotojuan/saga-login-flow/blob/master/app/actions/index.js
-
 export const SET_LOGGED_IN = 'SET_LOGGED_IN';
 export const DO_LOGIN = 'DO_LOGIN';
 export const DO_LOGOUT = 'DO_LOGOUT';

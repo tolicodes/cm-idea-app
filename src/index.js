@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { createStore, applyMiddleware } from 'redux';
+import { createStore, applyMiddleware, compose } from 'redux';
 import { Provider } from 'react-redux';
 import createSagaMiddleware from 'redux-saga';
 
@@ -14,10 +14,12 @@ import saga from './saga';
 // create the saga middleware
 const sagaMiddleware = createSagaMiddleware();
 
+const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+
 // mount it on the Store
 const store = createStore(
   reducer,
-  applyMiddleware(sagaMiddleware),
+  composeEnhancers(applyMiddleware(sagaMiddleware)),
 );
 
 // then run the saga

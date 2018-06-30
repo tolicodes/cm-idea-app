@@ -3,11 +3,11 @@ import { BrowserRouter as Router, Route } from "react-router-dom";
 
 import styled from 'styled-components';
 
-import MainCSS from './main.css';
+import './main.css';
 
 import SignUp from './Auth/components/SignUp';
 import LogIn from './Auth/components/LogIn';
-import MyIdeas from './MyIdeas/';
+import MyIdeas from './MyIdeas';
 import Sidebar from './Sidebar';
 
 const PageContainer = styled.div`

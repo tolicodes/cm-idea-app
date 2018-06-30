@@ -1,11 +1,26 @@
 import React, { Component } from 'react';
-
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
 import styled from 'styled-components';
 
 import AddIdeaButtonImg from '../assets/btn_addanidea.png';
 import GotIdeasImage from '../assets/bulb.png';
 
-import Idea from './Idea';
+import {
+  addIdea,
+  deleteIdea,
+  removeIdea,
+  editIdea,
+  updateIdea,
+  createIdea,
+} from './actions';
+
+import Idea, {
+  LEFT_WIDTH,
+  BUTTONS_WIDTH,
+  Fields,
+  Field,
+} from './Idea';
 
 const PageWrapper = styled.div`
   margin-top: 41px;
@@ -54,10 +69,37 @@ const GotIdeasText = styled.h3`
 `;
 
 const IdeasList = styled.ul`
-
+  margin: 0;
+  padding: 0;
+  margin-top: 39px;
 `;
 
-export default class MyIdeas extends Component {
+const HeaderRow = styled.div`
+  display: flex;
+  direction: row;
+  margin-bottom: 28px;
+`;
+
+const SpacerLeft = styled.div`
+  display: flex;
+  flex: ${LEFT_WIDTH};
+`;
+
+const SpacerRight = styled.div`
+  display: flex;
+  flex: ${BUTTONS_WIDTH};
+`;
+
+const HeaderCell = styled(Field)`
+  font-size: 14px;
+  color: #2A3842;
+`;
+
+const AvgCell = styled(HeaderCell)`
+  font-weight: bold;
+`;
+
+class MyIdeas extends Component {
   constructor(props) {
     super(props);
 
@@ -80,13 +122,51 @@ export default class MyIdeas extends Component {
 
   renderIdeasList() {
     const {
-      ideas
+      ideas,
+      deleteIdea,
+      removeIdea,
+      editIdea,
+      updateIdea,
+      createIdea,
     } = this.props;
 
     return (
       <IdeasList>
+        <HeaderRow>
+          <SpacerLeft/>
+
+          <Fields>
+            <HeaderCell>
+              Impact
+            </HeaderCell>
+
+            <HeaderCell>
+              Ease
+            </HeaderCell>
+
+            <HeaderCell>
+              Confidence
+            </HeaderCell>
+
+            <AvgCell>
+              Avg
+            </AvgCell>
+          </Fields>
+
+          <SpacerRight/>
+        </HeaderRow>
         {
-          ideas.map(idea => <Idea key={idea.id} {...idea}/>)
+          ideas.map(idea => (
+            <Idea
+              key={idea.id}
+              deleteIdea={deleteIdea}
+              removeIdea={removeIdea}
+              editIdea={editIdea}
+              updateIdea={updateIdea}
+              createIdea={createIdea}
+              {...idea}
+            />
+          ))
         }
       </IdeasList>
     );
@@ -94,6 +174,7 @@ export default class MyIdeas extends Component {
 
   render() {
     const { ideas } = this.props || {};
+
     return (
       <PageWrapper>
         <PageTitle>
@@ -103,7 +184,7 @@ export default class MyIdeas extends Component {
         </PageTitle>
 
         {
-          false && ideas && ideas.length ?
+          ideas && ideas.length ?
           this.renderIdeasList() :
           this.renderGotIdeas()
         }
@@ -111,3 +192,17 @@ export default class MyIdeas extends Component {
     );
   }
 }
+
+export default connect(
+  ({ myIdeas: { ideas }}) => ({
+    ideas,
+  }),
+  dispatch => bindActionCreators({
+    addIdea,
+    deleteIdea,
+    removeIdea,
+    editIdea,
+    updateIdea,
+    createIdea,
+  }, dispatch),
+)(MyIdeas);

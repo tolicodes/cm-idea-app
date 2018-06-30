@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import {
   Wrapper,
   Title,
-  Fields,
+  Form,
   Input,
   FormBottom,
   PrimaryButton,
@@ -19,7 +19,7 @@ export default class LogIn extends Component {
           Log In
         </Title>
 
-        <Fields>
+        <Form>
           <Input type="text" placeholder="Email"/>
 
           <Input type="password" placeholder="Password"/>
@@ -32,7 +32,7 @@ export default class LogIn extends Component {
               <FormBottomLink to="/signup"> Create an account</FormBottomLink>
             </FormBottomMessage>
           </FormBottom>
-        </Fields>
+        </Form>
       </Wrapper>
     );
   }

@@ -22,9 +22,9 @@ export function logIn (data) {
  }
  */
 export function register(data) {
-  return POST('/access-tokens', data);
+  return POST('/users', data);
 }
 
-export function logOut () {
+export function logOut() {
   return DELETE('/access-tokens');
 }
