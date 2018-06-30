@@ -12,6 +12,8 @@ import {
   Input
 } from '../styles';
 
+import ConfirmationModal from './ConfirmationModal';
+
 const NUMBER_OF_OPTIONS = 10;
 
 const BULLET_CELL_WIDTH = 32;
@@ -22,7 +24,7 @@ export const LEFT_WIDTH = BULLET_CELL_WIDTH + IDEA_CONTENT_CELL_WIDTH;
 export const FIELD_WIDTH = 63;
 
 // check + x + space in between + left margin
-export const BUTTONS_WIDTH = 19 + 16 + 22 + 8;
+export const BUTTONS_WIDTH = 87;
 
 const IdeaWrapper = styled.li`
   display: flex;
@@ -90,23 +92,26 @@ const Buttons = styled.div`
 `;
 
 const Button = styled.button`
-  width: 20px;
-  height: 20px;
   border: none;
+  cursor: pointer;
+  margin: 0 11px;
 `;
 
 const EditButton = styled(Button)`
+  width: 20px;
+  height: 20px;
   background: url(${EditButtonImage});
 `;
 
 const DeleteButton = styled(Button)`
   background: url(${DeleteButtonImage});
+  width: 16px;
+  height: 20px;
 `;
 
 const SaveButton = styled(Button)`
   width: 21px;
   height: 16px;
-  margin-right: 22px;
   background: url(${SaveButtonImage});
 `;
 
@@ -146,8 +151,9 @@ export default class Idea extends Component {
     });
   }
 
-  componentWillReceiveProps({ impact, ease, confidence }) {
+  componentWillReceiveProps({ impact, ease, confidence, ...rest }) {
     this.setState({
+      ...rest,
       average_score: this.getAverageScore({ impact, ease, confidence }),
     });
   }
@@ -190,13 +196,13 @@ export default class Idea extends Component {
   onClickSave() {
     const {
       id,
-      savedToServer,
+      newlyCreated,
       updateIdea,
       createIdea,
     } = this.props;
 
     const propsToSave = pick(
-      this.props,
+      this.state,
       [
         'content',
         'impact',
@@ -206,7 +212,7 @@ export default class Idea extends Component {
       ],
     );
 
-    if (savedToServer) {
+    if (!newlyCreated) {
       updateIdea(id, propsToSave);
     } else {
       createIdea(id, propsToSave);
@@ -214,14 +220,26 @@ export default class Idea extends Component {
   }
 
   onClickRemove() {
+    this.setState({
+      showRemoveModal: true
+    });
+  }
+
+  onCancelRemove() {
+    this.setState({
+      showRemoveModal: false
+    });
+  }
+
+  onConfirmRemove() {
     const {
       id,
-      savedToServer,
+      newlyCreated,
       deleteIdea,
       removeIdea,
     } = this.props;
 
-    if (savedToServer) {
+    if (!newlyCreated) {
       deleteIdea(id);
     } else {
       removeIdea(id);
@@ -234,7 +252,21 @@ export default class Idea extends Component {
       editIdea,
     } = this.props;
 
-    editIdea(id);
+    editIdea(id, true);
+  }
+
+  renderRemoveModal() {
+    const { showRemoveModal } = this.state;
+    return (
+      showRemoveModal
+        ? (
+          <ConfirmationModal
+            hideModal={this.onCancelRemove}
+            confirm={this.onConfirmRemove}
+          />
+        )
+        : null
+    )
   }
 
   renderEditIdea() {
@@ -243,7 +275,7 @@ export default class Idea extends Component {
       impact,
       ease,
       confidence,
-      average_score
+      average_score,
     } = this.state;
 
     return (
@@ -282,6 +314,8 @@ export default class Idea extends Component {
           <SaveButton onClick={this.onClickSave} />
           <RemoveButton onClick={this.onClickRemove}/>
         </Buttons>
+
+        {this.renderRemoveModal()}
       </IdeaWrapper>
     );
   }
@@ -293,10 +327,14 @@ export default class Idea extends Component {
       ease,
       confidence,
       average_score,
-    } = this.props;
+    } = this.state;
 
     return (
       <IdeaWrapper>
+        <BulletCell>
+          <Bullet/>
+        </BulletCell>
+
         <IdeaContentCell>
           <IdeaContent>{content}</IdeaContent>
         </IdeaContentCell>
@@ -312,6 +350,8 @@ export default class Idea extends Component {
           <EditButton onClick={this.onClickEdit} />
           <DeleteButton onClick={this.onClickRemove} />
         </Buttons>
+
+        {this.renderRemoveModal()}
       </IdeaWrapper>
     );
   }

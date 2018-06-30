@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-
 import autoBind from 'react-autobind';
+
 import {
   Wrapper,
   Title,
@@ -15,7 +15,6 @@ import {
 } from '../styles';
 
 import {
-  changeLoggedIn,
   doRegister,
 } from '../actions';
 
@@ -119,7 +118,6 @@ class SignUp extends Component {
 export default connect(
   null,
   dispatch => bindActionCreators({
-    changeLoggedIn,
     doRegister,
   }, dispatch),
 )(SignUp);

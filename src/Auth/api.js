@@ -11,7 +11,7 @@ import {
  }
  */
 export function logIn (data) {
-  return GET('/access-tokens', data);
+  return POST('/access-tokens', data);
 }
 
 /*
@@ -25,6 +25,16 @@ export function register(data) {
   return POST('/users', data);
 }
 
-export function logOut() {
-  return DELETE('/access-tokens');
+export function logOut(refresh_token) {
+  return DELETE('/access-tokens', { refresh_token });
+}
+
+export function refreshToken(refresh_token) {
+  return POST('/access-tokens/refresh', {
+    refresh_token,
+  });
+}
+
+export function getMe() {
+  return GET('/me');
 }
