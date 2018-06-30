@@ -2,14 +2,10 @@ import React, { Component } from 'react';
 
 import styled from 'styled-components';
 
-import AddIdeaButtonImg from './assets/btn_addanidea.png';
-import GotIdeasImage from './assets/bulb.png';
+import AddIdeaButtonImg from '../assets/btn_addanidea.png';
+import GotIdeasImage from '../assets/bulb.png';
 
 import Idea from './Idea';
-
-import {
-  Input
-} from './CommonStyles';
 
 const PageWrapper = styled.div`
   margin-top: 41px;

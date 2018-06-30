@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
 
-import EditButtonImage from './assets/pen.png';
-import DeleteButtonImage from './assets/bin.png';
-import SaveButtonImage from './assets/check.png';
-import RemoveButtonImage from './assets/x.png';
+import EditButtonImage from '../assets/pen.png';
+import DeleteButtonImage from '../assets/bin.png';
+import SaveButtonImage from '../assets/check.png';
+import RemoveButtonImage from '../assets/x.png';
 
 const IdeaWrapper = styled.div`
   display: flex;

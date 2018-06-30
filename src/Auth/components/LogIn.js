@@ -8,14 +8,16 @@ import {
   FormBottom,
   PrimaryButton,
   FormBottomMessage,
-  FormBottomLink
-} from './CommonStyles';
+  FormBottomLink,
+} from '../styles';
 
 export default class LogIn extends Component {
   render() {
     return (
       <Wrapper>
-        <Title>Log In</Title>
+        <Title>
+          Log In
+        </Title>
 
         <Fields>
           <Input type="text" placeholder="Email"/>

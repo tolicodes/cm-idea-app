@@ -1,13 +1,15 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { createStore, applyMiddleware } from 'redux';
+import { Provider } from 'react-redux';
+import createSagaMiddleware from 'redux-saga';
+
 import App from './App';
 import registerServiceWorker from './registerServiceWorker';
 
-import { createStore, applyMiddleware } from 'redux'
-import createSagaMiddleware from 'redux-saga'
 
-import reducer from './reducers';
-import rootSaga from './sagas';
+import reducer from './reducer';
+import saga from './saga';
 
 // create the saga middleware
 const sagaMiddleware = createSagaMiddleware();
@@ -15,11 +17,16 @@ const sagaMiddleware = createSagaMiddleware();
 // mount it on the Store
 const store = createStore(
   reducer,
-  applyMiddleware(sagaMiddleware)
+  applyMiddleware(sagaMiddleware),
 );
 
 // then run the saga
-sagaMiddleware.run(rootSaga);
+sagaMiddleware.run(saga);
 
-ReactDOM.render(<App />, document.getElementById('root'));
+ReactDOM.render(
+  <Provider store={store}>
+    <App />
+  </Provider>,
+  document.getElementById('root')
+);
 registerServiceWorker();

@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 
 import {
   Wrapper,
@@ -8,14 +9,16 @@ import {
   FormBottom,
   PrimaryButton,
   FormBottomMessage,
-  FormBottomLink
-} from './CommonStyles';
+  FormBottomLink,
+} from '../styles';
 
 export default class SignUp extends Component {
   render() {
     return (
       <Wrapper>
-        <Title>Sign Up</Title>
+        <Title>
+          Sign Up
+        </Title>
 
         <Fields>
           <Input type="text" placeholder="Name"/>

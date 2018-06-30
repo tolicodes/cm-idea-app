@@ -1,15 +1,14 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { BrowserRouter as Router, Route } from "react-router-dom";
 
 import styled from 'styled-components';
 
-import SignUp from './SignUp';
-import LogIn from './LogIn';
-import MyIdeas from './MyIdeas';
+import MainCSS from './main.css';
 
-import Sidebar from './SideBar';
-
-import './App.css';
+import SignUp from './Auth/components/SignUp';
+import LogIn from './Auth/components/LogIn';
+import MyIdeas from './MyIdeas/';
+import Sidebar from './Sidebar';
 
 const PageContainer = styled.div`
   width: calc(100% - 200px);
@@ -20,18 +19,17 @@ const PageContainer = styled.div`
   align-items: center;
 `;
 
-export default class App extends Component {
-  render() {
-    return (
-      <Router>
-        <PageContainer>
-          <Sidebar/>
-          <Route path="/" exact component={SignUp}/>
-          <Route path="/signup" component={SignUp}/>
-          <Route path="/login" component={LogIn}/>
-          <Route path="/my-ideas" component={MyIdeas}/>
-        </PageContainer>
-      </Router>
-    );
-  }
+export default function App () {
+  return (
+    <Router>
+      <PageContainer>
+        <Sidebar/>
+
+        <Route path="/" exact component={SignUp}/>
+        <Route path="/signup" component={SignUp}/>
+        <Route path="/login" component={LogIn}/>
+        <Route path="/my-ideas" component={MyIdeas}/>
+      </PageContainer>
+    </Router>
+  );
 }

@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
-import { Link } from "react-router-dom";
+import { Link } from 'react-router-dom';
 
 import styled from 'styled-components';
 
-import IdeaPoolIcon from './assets/IdeaPool_icon.png'
+import IdeaPoolIcon from '../assets/IdeaPool_icon.png';
 
 
 const CONTAINER_WIDTH = 200 - (37) * 2;
@@ -48,20 +48,23 @@ const SidebarLink = styled(Link)`
   font-size: 16px;
   color: rgba(42,56,66,0.65);
   text-decoration: none;
-`
+`;
 
 export default class Sidebar extends Component {
   renderUserItem() {
+    const { user } = this.props || {};
     const {
       profilePicture,
-      name
-    } = this.props.user || {};
+      name,
+    } = user || {};
 
     return (
       <SidebarItem to="/logout">
         <Icon src={profilePicture}/>
 
-        <Label>{name}</Label>
+        <Label>
+          {name}
+        </Label>
 
         <SidebarLink to="/logout">Log out</SidebarLink>
       </SidebarItem>
@@ -73,9 +76,11 @@ export default class Sidebar extends Component {
 
     return (
       <SidebarContainer>
-        <SidebarItem to="/dashboard">
-          <Icon src={IdeaPoolIcon}/>
-          <Label>The Idea Pool</Label>
+        <SidebarItem to="/my-ideas">
+          <Icon src={IdeaPoolIcon} />
+          <Label>
+            The Idea Pool
+          </Label>
         </SidebarItem>
 
         {
