@@ -1,4 +1,4 @@
-import { stringify } from 'query-string';
+import { stringify } from 'qs';
 import { apiBase } from './config';
 
 async function api(path, data, method = 'GET', extraParams) {
