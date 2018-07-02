@@ -79,12 +79,15 @@ function* getLoggedIn(){
   return yield select(({ auth: { loggedIn } }) => loggedIn);
 }
 
-function* doIntervalRefreshToken() {
+function* doIntervalRefreshToken({ loggedIn }) {
+  if (!loggedIn) return;
+
   while (true) {
     yield delay(TOKEN_REFRESH_DELAY);
 
     if((!getRefreshToken())) {
       yield unsetTokens();
+      return;
     } else {
       yield refreshTokenOnce();
     }
