@@ -3,7 +3,6 @@ import {
   put,
   all,
   select,
-  fork,
 } from 'redux-saga/effects';
 
 import { push } from 'connected-react-router';
@@ -29,7 +28,7 @@ import {
   setLoggedIn,
 } from './actions';
 
-
+// 10 seconds
 const TOKEN_REFRESH_DELAY = 10000;
 
 const delay = ms => new Promise(res => setTimeout(res, ms));
@@ -39,16 +38,20 @@ function* forwardTo(location) {
 }
 
 function* onInitialize() {
-  if (!getRefreshToken()) {
-    const { pathname } = yield select(state => state.router.location);
+  const { pathname } = yield select(state => state.router.location);
 
+  if (!getRefreshToken()) {
     if (!['/signup', '/login', '/'].includes(pathname)) {
       yield forwardTo('/login');
     }
   } else {
-    yield fork(doRefreshToken);
+    if(yield refreshTokenOnce()) {
+      yield put(setLoggedIn(true));
 
-    yield put(setLoggedIn(true));
+      if(pathname === '/') {
+        yield forwardTo('/my-ideas');
+      }
+    }
   }
 }
 
@@ -61,14 +64,14 @@ function* getPathname() {
 }
 
 function* refreshTokenOnce() {
-  const token = yield handleError(() => refreshToken(getRefreshToken()), {
-    silent: true,
-  });
+  const token = yield refreshToken(getRefreshToken());
 
   if (token) {
     yield setTokens(token);
+    return true;
   } else {
     yield unsetTokens(token);
+    return false;
   }
 }
 
@@ -76,15 +79,12 @@ function* getLoggedIn(){
   return yield select(({ auth: { loggedIn } }) => loggedIn);
 }
 
-function* doRefreshToken() {
-  let loggedIn = true;
-  while (loggedIn) {
+function* doIntervalRefreshToken() {
+  while (true) {
     yield delay(TOKEN_REFRESH_DELAY);
-    loggedIn = yield getLoggedIn();
 
-    if((!getRefreshToken()) && (yield getPathname()) !== '/login') {
+    if((!getRefreshToken())) {
       yield unsetTokens();
-      loggedIn = false;
     } else {
       yield refreshTokenOnce();
     }
@@ -150,6 +150,7 @@ export function* doGetMe({ loggedIn }) {
 export default function* root() {
   yield all([
     onInitialize(),
+    yield takeLatest(SET_LOGGED_IN, doIntervalRefreshToken),
     yield takeLatest(SET_LOGGED_IN, doGetMe),
     yield takeLatest(DO_LOGIN, doLogin),
     yield takeLatest(DO_REGISTER, doRegister),
